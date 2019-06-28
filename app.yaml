@@ -1,0 +1,35 @@
+kind: Service
+apiVersion: v1
+metadata:
+  name: user-svc
+  labels:
+    app: user-svc
+spec:
+  type: LoadBalancer
+  selector:
+    app: user-svc
+  ports:
+  - port: 8080
+    targetPort: 8080
+    name: http
+---
+kind: Deployment
+apiVersion: extensions/v1beta1
+metadata:
+  name: user-svc
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: user-svc
+        version: v1
+    spec:
+      containers:
+      - name: user-svc
+        #image should be changed to point to the proper Docker image in your OCIR repo
+        image: user-svc
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 8080
+---
