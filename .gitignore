@@ -95,5 +95,6 @@ hs_err_pid*
 !/build-resource/libs/README.md
 /build-resource/wallet/*
 !/build-resource/wallet/README.md
-.idea/
+.idea/*
 *.iml
+
