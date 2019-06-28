@@ -5,9 +5,13 @@ import codes.recursive.cnms.user.model.User;
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
 import javax.persistence.*;
+import javax.validation.ConstraintViolation;
+import javax.validation.Validation;
+import javax.validation.Validator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 @RequestScoped
 public class UserRepository {
@@ -22,6 +26,12 @@ public class UserRepository {
         configOverrides.put("hibernate.connection.password", userProvider.getDbPassword());
         EntityManagerFactory emf = Persistence.createEntityManagerFactory("UserPU", configOverrides);
         entityManager = emf.createEntityManager();
+    }
+
+    public Set<ConstraintViolation<User>> validate(User user) {
+        Validator validator = Validation.buildDefaultValidatorFactory().getValidator();
+        Set<ConstraintViolation<User>> constraintViolations = validator.validate(user);
+        return constraintViolations;
     }
 
     public User save(User user) {

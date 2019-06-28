@@ -4,6 +4,8 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import java.util.Date;
 
 @Entity
@@ -17,12 +19,18 @@ public class User {
     private String id;
 
     @Column(name = "first_name")
+    @NotNull
+    @Size(max=50)
     private String firstName;
 
     @Column(name = "last_name")
+    @NotNull
+    @Size(max=50)
     private String lastName;
 
     @Column(name = "username")
+    @NotNull
+    @Size(max=50)
     private String username;
 
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss.SSSXXX")

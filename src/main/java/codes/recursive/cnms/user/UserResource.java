@@ -23,15 +23,13 @@ import javax.inject.Inject;
 import javax.json.Json;
 import javax.json.JsonBuilderFactory;
 import javax.json.JsonObject;
+import javax.validation.ConstraintViolation;
 import javax.ws.rs.*;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.Collections;
-import java.util.TimeZone;
+import java.util.*;
 
 /**
  * Resource for managing users
@@ -91,12 +89,35 @@ public class UserResource {
     @POST
     @Produces(MediaType.APPLICATION_JSON)
     public Response saveUser(User user) {
-        userRepository.save(user);
-        return Response.created(
-                uriInfo.getBaseUriBuilder()
-                        .path("/user/{id}")
-                        .build(user.getId())
-        ).build();
+        Set<ConstraintViolation<User>> violations = userRepository.validate(user);
+
+        if( violations.size() == 0 ) {
+            userRepository.save(user);
+            return Response.created(
+                    uriInfo.getBaseUriBuilder()
+                            .path("/user/{id}")
+                            .build(user.getId())
+            ).build();
+        }
+        else {
+            List<HashMap<String, String>> errors = new ArrayList<>();
+            HashMap<String, Object> response = new HashMap<>();
+            for (ConstraintViolation<User> violation : violations) {
+                Object invalidValue = violation.getInvalidValue();
+                HashMap<String, String> map = new HashMap<>();
+                map.put("field", violation.getPropertyPath().toString());
+                if( invalidValue != null ) {
+                    map.put("currentValue", invalidValue.toString());
+                }
+                map.put("message", violation.getMessage());
+                errors.add(map);
+            }
+            response.put("validationErrors", errors);
+            return Response.status(422)
+                    .entity(response)
+                    .build();
+        }
+
     }
 
     @Path("{id}")
