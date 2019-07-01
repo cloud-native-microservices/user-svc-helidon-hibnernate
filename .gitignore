@@ -91,10 +91,12 @@ fabric.properties
 hs_err_pid*
 
 /build-resource/env.sh
+/build-resource/env-docker.sh
 /build-resource/libs/*
 !/build-resource/libs/README.md
 /build-resource/wallet/*
 !/build-resource/wallet/README.md
 .idea/*
 *.iml
+secret.yaml
 

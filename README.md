@@ -114,7 +114,7 @@ java
 
 ## Test Endpoints
 
-Get User Service Endpoint (returns 200 OK)
+Get User Service Endpoint (returns 200 OK):
 
 ```
 curl -iX GET http://localhost:8080/user                                                                                                                                                    
@@ -126,7 +126,7 @@ connection: keep-alive
 {"OK":true}                                                          
 ```
 
-Save a new user (ID is returned in `Location` header)
+Save a new user (ID is returned in `Location` header):
 
 ```bash
 curl -iX POST -H "Content-Type: application/json" -d '{"firstName": "Todd", "lastName": "Sharp", "username": "recursivecodes"}' http://localhost:8080/user/save                            
@@ -135,6 +135,19 @@ Date: Thu, 20 Jun 2019 10:45:38 -0400
 Location: http://[0:0:0:0:0:0:0:1]:8080/user/8BC3669097C9EC53E0532110000A6E11
 transfer-encoding: chunked
 connection: keep-alive
+```
+
+Save a new user with invalid data (will return 422 and validation errors):
+
+```bash
+curl -iX POST -H "Content-Type: application/json" -d '{"firstName": "A Really Long First Name That Will Be Longer Than 50 Chars", "lastName": null, "username": null}' http://localhost:8080/user/save                            
+HTTP/1.1 422 Unprocessable Entity
+Content-Type: application/json
+Date: Mon, 1 Jul 2019 11:21:57 -0400
+transfer-encoding: chunked
+connection: keep-alive
+
+{"validationErrors":[{"field":"username","message":"may not be null","currentValue":null},{"field":"lastName","message":"may not be null","currentValue":null},{"field":"firstName","message":"size must be between 0 and 50","currentValue":"A Really Long First Name That Will Be Longer Than 50 Chars"}]}%                                    
 ```
 
 Get the new user
@@ -150,7 +163,7 @@ connection: keep-alive
 {"id":"8BC3669097C9EC53E0532110000A6E11","firstName":"Todd","lastName":"Sharp","username":"recursivecodes","createdOn":"2019-06-20T14:45:38.509Z"}
 ```
 
-List all users
+List all users:
 
 ```bash
 curl -iX GET http://localhost:8080/user/list                                                                                                                                               
@@ -163,7 +176,7 @@ connection: keep-alive
 [{"id":"8BC3669097C9EC53E0532110000A6E11","firstName":"Todd","lastName":"Sharp","username":"recursivecodes","createdOn":"2019-06-20T14:45:38.509Z"}]
 ```
 
-Delete a user
+Delete a user:
 
 ```bash
 curl -iX DELETE http://localhost:8080/user/8BC3669097C9EC53E0532110000A6E11                                                                                                                
@@ -172,7 +185,7 @@ Date: Thu, 20 Jun 2019 10:47:21 -0400
 connection: keep-alive
 ```
 
-Confirm delete (same GET by ID will return 404)
+Confirm delete (same GET by ID will return 404):
 
 ```bash
 curl -iX GET http://localhost:8080/user/8BC3669097C9EC53E0532110000A6E11                                                                                                                   

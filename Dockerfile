@@ -16,7 +16,7 @@ ADD src src
 RUN mvn package -DskipTests
 
 # 2nd stage, build the runtime image
-FROM openjdk:8-jre-slim
+FROM openjdk:9-jre-slim
 WORKDIR /helidon
 
 # Copy the binary built in the 1st stage

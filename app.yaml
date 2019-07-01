@@ -1,13 +1,13 @@
 kind: Service
 apiVersion: v1
 metadata:
-  name: user-svc
+  name: user-svc-helidon
   labels:
-    app: user-svc
+    app: user-svc-helidon
 spec:
   type: LoadBalancer
   selector:
-    app: user-svc
+    app: user-svc-helidon
   ports:
   - port: 8080
     targetPort: 8080
@@ -16,20 +16,52 @@ spec:
 kind: Deployment
 apiVersion: extensions/v1beta1
 metadata:
-  name: user-svc
+  name: user-svc-helidon
 spec:
   replicas: 1
   template:
     metadata:
       labels:
-        app: user-svc
+        app: user-svc-helidon
         version: v1
     spec:
       containers:
-      - name: user-svc
-        #image should be changed to point to the proper Docker image in your OCIR repo
-        image: user-svc
+      - name: user-svc-helidon
+        image: phx.ocir.io/toddrsharp/cloud-native-microservice/user-svc-helidon:latest
+        command: ["java", "-jar"]
+        args:
+        - "-Doracle.net.wallet_location=/helidon/wallet"
+        - "-Doracle.net.authentication_services=(TCPS)"
+        - "-Doracle.net.tns_admin=/helidon/wallet"
+        - "-Djavax.net.ssl.trustStore=/helidon/wallet/cwallet.sso"
+        - "-Djavax.net.ssl.trustStoreType=SSO"
+        - "-Djavax.net.ssl.keyStore=/helidon/wallet/cwallet.sso"
+        - "-Djavax.net.ssl.keyStoreType=SSO"
+        - "-Doracle.net.ssl_server_dn_match=true"
+        - "-Doracle.net.ssl_version=1.2"
+        - "-Ddatasource.username=$(DB_USER)"
+        - "-Ddatasource.password=$(DB_PASSWORD)"
+        - "-Ddatasource.url=$(DB_URL)"
+        - "user-svc.jar"
+        env:
+          - name: DB_USER
+            valueFrom:
+              secretKeyRef:
+                name: user-svc-helidon-secrets
+                key: dbUser
+          - name: DB_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                name: user-svc-helidon-secrets
+                key: dbPassword
+          - name: DB_URL
+            valueFrom:
+              secretKeyRef:
+                name: user-svc-helidon-secrets
+                key: dbUrl
         imagePullPolicy: Always
         ports:
-        - containerPort: 8080
+          - containerPort: 8080
+      imagePullSecrets:
+      - name: regcred
 ---

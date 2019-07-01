@@ -38,8 +38,6 @@ import java.util.*;
 @RequestScoped
 public class UserResource {
 
-    private static final JsonBuilderFactory JSON = Json.createBuilderFactory(Collections.emptyMap());
-
     private final UserRepository userRepository;
 
     @Context
@@ -52,10 +50,8 @@ public class UserResource {
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    public JsonObject getDefaultMessage() {
-        return JSON.createObjectBuilder()
-                .add("OK", true)
-                .build();
+    public Response getDefaultMessage() {
+        return Response.ok(Map.of("OK", true)).build();
     }
 
     @Path("/{id}")
@@ -101,20 +97,20 @@ public class UserResource {
         }
         else {
             List<HashMap<String, String>> errors = new ArrayList<>();
-            HashMap<String, Object> response = new HashMap<>();
-            for (ConstraintViolation<User> violation : violations) {
-                Object invalidValue = violation.getInvalidValue();
-                HashMap<String, String> map = new HashMap<>();
-                map.put("field", violation.getPropertyPath().toString());
-                if( invalidValue != null ) {
-                    map.put("currentValue", invalidValue.toString());
-                }
-                map.put("message", violation.getMessage());
-                errors.add(map);
-            }
-            response.put("validationErrors", errors);
+
+            violations.stream()
+                    .forEach( (violation) -> {
+                                Object invalidValue = violation.getInvalidValue();
+                                HashMap<String, String> errorMap = new HashMap<>();
+                                errorMap.put("field", violation.getPropertyPath().toString());
+                                errorMap.put("message", violation.getMessage());
+                                errorMap.put("currentValue", invalidValue == null ? null : invalidValue.toString());
+                                errors.add(errorMap);
+                            }
+                    );
+
             return Response.status(422)
-                    .entity(response)
+                    .entity(Map.of( "validationErrors", errors ))
                     .build();
         }
 
@@ -122,7 +118,7 @@ public class UserResource {
 
     @Path("{id}")
     @DELETE
-    public Response deletePost(@PathParam("id") String id) {
+    public Response deleteUser(@PathParam("id") String id) {
         userRepository.deleteById(id);
         return Response.noContent().build();
     }
