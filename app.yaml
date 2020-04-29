@@ -30,15 +30,6 @@ spec:
         image: phx.ocir.io/toddrsharp/cloud-native-microservice/user-svc-helidon:latest
         command: ["java", "-jar"]
         args:
-        - "-Doracle.net.wallet_location=/helidon/wallet"
-        - "-Doracle.net.authentication_services=(TCPS)"
-        - "-Doracle.net.tns_admin=/helidon/wallet"
-        - "-Djavax.net.ssl.trustStore=/helidon/wallet/cwallet.sso"
-        - "-Djavax.net.ssl.trustStoreType=SSO"
-        - "-Djavax.net.ssl.keyStore=/helidon/wallet/cwallet.sso"
-        - "-Djavax.net.ssl.keyStoreType=SSO"
-        - "-Doracle.net.ssl_server_dn_match=true"
-        - "-Doracle.net.ssl_version=1.2"
         - "-Ddatasource.username=$(DB_USER)"
         - "-Ddatasource.password=$(DB_PASSWORD)"
         - "-Ddatasource.url=$(DB_URL)"
