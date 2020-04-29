@@ -51,23 +51,15 @@ CREATE TABLE jpa_users(
 
 ## Dependencies
 
-This project requires the following JARs from Oracle.
+~~This project requires the following JARs from Oracle.
 
 * ojdbc8.jar
 * oraclepki.jar
 * osdt_cert.jar
-* osdt_core.jar
+* osdt_core.jar~~
 
-These can be downloaded [here](https://www.oracle.com/technetwork/database/application-development/jdbc/downloads/index.html). Once downloaded, place them in `build-resource/libs/`.
+Update: April 2020. This is no longer required. OJDBC dependencies are in Maven Central and the `POM.xml` has been updated to pull from there.
 
-Install these to your local Maven via commands similar to these (modify the path and/or version numbers as appropriate):
-
-```bash
-mvn install:install-file -Dfile=/path/to/ojdbc8.jar -DgroupId=com.oracle.jdbc -DartifactId=ojdbc8 -Dversion=18.3.0.0 -Dpackaging=jar
-mvn install:install-file -Dfile=/path/to/oraclepki.jar -DgroupId=com.oracle.jdbc -DartifactId=oraclepki -Dversion=18.3.0.0 -Dpackaging=jar
-mvn install:install-file -Dfile=/path/to/osdt_core.jar -DgroupId=com.oracle.jdbc -DartifactId=osdt_core -Dversion=18.3.0.0 -Dpackaging=jar
-mvn install:install-file -Dfile=/path/to/osdt_cert.jar -DgroupId=com.oracle.jdbc -DartifactId=osdt_cert -Dversion=18.3.0.0 -Dpackaging=jar
-```
 ## Building
 
 ```bash
@@ -79,15 +71,6 @@ mvn package
 Create a debug configuration in IntelliJ that runs `mvn package` and then runs the generated JAR. Pass the following properties as 'VM Options':
 
 ```bash
--Doracle.net.wallet_location=/path/to/wallet
--Doracle.net.authentication_services="(TCPS)"
--Doracle.net.tns_admin=/wallet-demodb
--Djavax.net.ssl.trustStore=/path/to/wallet/cwallet.sso
--Djavax.net.ssl.trustStoreType=SSO
--Djavax.net.ssl.keyStore=/path/to/wallet/cwallet.sso
--Djavax.net.ssl.keyStoreType=SSO
--Doracle.net.ssl_server_dn_match=true
--Doracle.net.ssl_version="1.2"
 -Ddatasource.username=[Username]
 -Ddatasource.password=[Strong Password]
 -Ddatasource.url=jdbc:oracle:thin:@demodb_LOW?TNS_ADMIN=/path/to/wallet
@@ -97,15 +80,6 @@ Create a debug configuration in IntelliJ that runs `mvn package` and then runs t
  
  ```bash
 java 
-    -Doracle.net.wallet_location=/path/to/wallet \
-    -Doracle.net.authentication_services="(TCPS)" \
-    -Doracle.net.tns_admin=/wallet-demodb \
-    -Djavax.net.ssl.trustStore=/path/to/wallet/cwallet.sso \
-    -Djavax.net.ssl.trustStoreType=SSO \
-    -Djavax.net.ssl.keyStore=/path/to/wallet/cwallet.sso \
-    -Djavax.net.ssl.keyStoreType=SSO \
-    -Doracle.net.ssl_server_dn_match=true \
-    -Doracle.net.ssl_version="1.2" \
     -Ddatasource.username=[username] \
     -Ddatasource.password=[password] \
     -Ddatasource.url=jdbc:oracle:thin:@demodb_LOW?TNS_ADMIN=/path/to/wallet \
