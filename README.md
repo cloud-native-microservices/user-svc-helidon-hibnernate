@@ -39,7 +39,7 @@ GRANT UNLIMITED TABLESPACE TO usersvc;
 Create the necessary table(s):
 
 ```sql
-CREATE TABLE jpa_users(
+CREATE TABLE JPA_USERS(
     "ID" VARCHAR2(32 BYTE) DEFAULT ON NULL SYS_GUID(), 
 	"FIRST_NAME" VARCHAR2(50 BYTE) COLLATE "USING_NLS_COMP" NOT NULL ENABLE, 
 	"LAST_NAME" VARCHAR2(50 BYTE) COLLATE "USING_NLS_COMP" NOT NULL ENABLE, 
@@ -51,12 +51,12 @@ CREATE TABLE jpa_users(
 
 ## Dependencies
 
-~~This project requires the following JARs from Oracle.
+~~This project requires the following JARs from Oracle.~~
 
-* ojdbc8.jar
-* oraclepki.jar
-* osdt_cert.jar
-* osdt_core.jar~~
+~~* ojdbc8.jar~~
+~~* oraclepki.jar~~
+~~* osdt_cert.jar~~
+~~* osdt_core.jar~~
 
 Update: April 2020. This is no longer required. OJDBC dependencies are in Maven Central and the `POM.xml` has been updated to pull from there.
 
