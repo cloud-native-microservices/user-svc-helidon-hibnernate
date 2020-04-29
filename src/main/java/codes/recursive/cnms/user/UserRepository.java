@@ -3,6 +3,7 @@ package codes.recursive.cnms.user;
 import codes.recursive.cnms.user.model.User;
 
 import javax.enterprise.context.ApplicationScoped;
+import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
 import javax.persistence.*;
 import javax.validation.ConstraintViolation;
@@ -15,7 +16,9 @@ import java.util.Set;
 
 @ApplicationScoped
 public class UserRepository {
+
     @PersistenceContext
+    @RequestScoped
     private static EntityManager entityManager;
 
     @Inject
