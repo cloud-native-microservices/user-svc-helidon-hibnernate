@@ -8,12 +8,19 @@
     <persistence-unit name="UserPU">
         <provider>org.hibernate.jpa.HibernatePersistenceProvider</provider>
         <properties>
-            <property name="hibernate.connection.driver_class" value="oracle.jdbc.OracleDriver" />
+            <property name="hibernate.connection.driver_class" value="oracle.jdbc.driver.OracleDriver" />
             <property name="hibernate.archive.autodetection" value="class" />
             <property name="hibernate.show_sql" value="true" />
             <property name="hibernate.dialect" value="org.hibernate.dialect.Oracle12cDialect" />
             <property name="hibernate.format_sql" value="true" />
             <property name="hbm2ddl.auto" value="validate" />
+            <property name="connection.provider_class" value="org.hibernate.c3p0.internal.C3P0ConnectionProvider" />
+
+            <property name="hibernate.c3p0.min_size" value="5" />
+            <property name="hibernate.c3p0.max_size" value="200" />
+            <property name="hibernate.c3p0.timeout" value="180" />
+            <property name="hibernate.c3p0.max_statements" value="50" />
+
         </properties>
     </persistence-unit>
 </persistence>

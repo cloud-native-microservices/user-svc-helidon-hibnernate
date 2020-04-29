@@ -100,3 +100,4 @@ hs_err_pid*
 *.iml
 secret.yaml
 
+/build-resource/env-backup.sh

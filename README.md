@@ -39,13 +39,13 @@ GRANT UNLIMITED TABLESPACE TO usersvc;
 Create the necessary table(s):
 
 ```sql
-CREATE TABLE users(
+CREATE TABLE jpa_users(
     "ID" VARCHAR2(32 BYTE) DEFAULT ON NULL SYS_GUID(), 
 	"FIRST_NAME" VARCHAR2(50 BYTE) COLLATE "USING_NLS_COMP" NOT NULL ENABLE, 
 	"LAST_NAME" VARCHAR2(50 BYTE) COLLATE "USING_NLS_COMP" NOT NULL ENABLE, 
 	"USERNAME" VARCHAR2(50 BYTE) COLLATE "USING_NLS_COMP" NOT NULL ENABLE, 
 	"CREATED_ON" TIMESTAMP (6) DEFAULT ON NULL CURRENT_TIMESTAMP, 
-	 CONSTRAINT "USER_PK" PRIMARY KEY ("ID")
+	 CONSTRAINT "JPA_USER_PK" PRIMARY KEY ("ID")
 );
 ```
 
@@ -244,5 +244,5 @@ Test the endpoints as [described above](#test-endpoints)
 kubectl cluster-info                         # Verify which cluster
 kubectl get pods                             # Verify connectivity to cluster
 kubectl create -f app.yaml               # Deploy application
-kubectl get service user-svc  # Verify deployed service
+kubectl get service user-svc-helidon  # Verify deployed service
 ```
